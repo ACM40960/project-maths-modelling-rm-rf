@@ -1,0 +1,50 @@
+# ─────────────────────────────
+# Core LLM & Agent Framework
+langchain>=0.1.0
+openai>=1.0.0          # keep if you may still call OpenAI; remove if fully offline
+
+# Hugging Face models (embeddings + LLMs)
+transformers>=4.39.0
+sentence-transformers>=2.2.2
+accelerate>=0.27.0
+bitsandbytes>=0.43.0            # 4-bit / 8-bit quantization for big models
+huggingface-hub>=0.23.0
+
+# Vector DB
+faiss-cpu>=1.7.4                # switch to faiss-gpu if you have a CUDA card
+
+# GitHub interaction
+gitpython>=3.1.30
+
+# Optional: CPU-only GGUF inference (comment out if using GPU HF models)
+# ctransformers>=0.2.27
+
+# UI (Optional Streamlit interface)
+streamlit>=1.20.0
+
+# Environment variable support (e.g., for API keys)
+python-dotenv>=1.0.0
+
+# Jupyter / IPython kernel (for notebooks)
+ipykernel>=6.29.0
+
+transformers 
+accelerate 
+bitsandbytes 
+sentence-transformers
+
+tqdm 
+huggingface_hub
+
+tiktoken
+
+langchain-community
+
+
+
+langchain 
+langchain-community 
+langchain-core
+
+python-docx
+
