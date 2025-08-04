@@ -2,7 +2,7 @@
 auto_doc_agent/
 data/
 docs/
-notebooks/
+
 faiss_ast_index/
 faiss_index/
 tmp_repo/
