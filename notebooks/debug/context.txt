@@ -1,0 +1,330 @@
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_14] ### Extracting common required technical and soft skills required for each role.
+
+[requirements.txt:1-9] streamlit
+openai>=1.0.0
+PyPDF2
+pandas
+scikit-learn
+tqdm
+numpy
+pandas
+joblib
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_23] ### Action Plan Generation (Testing for 3 Candidates)
+
+[README.md:1-29] # StepUpYourCareer.ai: Elevate Your Future
+
+An AI-powered career assistant that helps students and job seekers identify **skill gaps**, receive **personalized learning roadmaps**, and connect with **industry mentors**—all from a single resume upload.
+
+### Link to the website: https://stepupyourcareer.streamlit.app/
+
+---
+
+## Problem
+
+Graduates often leave university with degrees but **lack clarity on what employers actually expect**. They spend months applying for jobs, facing rejections without knowing **what skills they’re missing** or **how to upskill efficiently**.
+
+---
+
+## Solution
+
+**StepUpYourCareer.ai** transforms your resume into a personalized upskilling journey.
+
+- **Skill Gap Analyzer**: Extracts skills from your resume and compares them to your target role
+- **Action Plan Generator**: Recommends curated online courses and resources for each missing skill
+- **Mentor Matching**: Clusters users and mentors using K-Means to connect you with experts in your domain
+
+---
+
+![Notes_250516_042908_1](https://github.com/user-attachments/assets/a42216a8-e04c-4335-aad7-d56a61cc873b)
+
+![Notes_250516_042908_4](https://github.com/user-attachments/assets/ba3b34ec-57ec-4bf5-906a-84af82342
+
+[ClusteringMentorModelTraining.ipynb:cell_9] ### Fitting a KMean model with range of cluster k and ran for 100 times to be certain.
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_12] ### Printing 120 job descriptions for each role (Total 600)
+
+[Job_Description_JD_Manupulation.ipynb:cell_0] <a href="https://colab.research.google.com/github/adarshlearnngrow/StepUp-AI/blob/main/Job_Description_JD_Manupulation.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+
+[ClusteringMentorModelTraining.ipynb:cell_14] ### Using TSNE to see if the clustering algorithm is grouping based on skills or based on roles
+
+[ClusteringMentorModelTraining.ipynb:cell_4] ## Prompt to generate Mentors with skills of experties
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_20] ### Skill Gap Analysis Functionality - allows user to upload their resume
+
+[Job_Description_JD_Manupulation.ipynb:cell_4] req_jobs_desc.loc[req_jobs_desc['Query'] == 'Artificial Intelligence', 'Query'] = 'AI Engineer'
+req_jobs_desc
+
+[Job_Description_JD_Manupulation.ipynb:cell_6] uploaded = files.upload()
+
+for fn in uploaded.keys():
+  print('User uploaded file "{name}" with length {length} bytes'.format(
+      name=fn, length=len(uploaded[fn])))
+
+[app.py:164-171] def extract_json_from_response(raw):
+    match = re.search(r"\{[\s\S]*\}", raw)
+    if match:
+        try:
+            return json.loads(match.group())
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_2] # !pip install PyPDF2 openai
+import openai
+import json
+import time
+import re
+from openai import OpenAI
+from google.colab import userdata
+import pandas as pd
+pd.set_option('display.max_colwidth', None)
+from PyPDF2 import PdfReader
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+[app.py:188-268] def generate_hybrid_action_plan(tech, soft, trans, skill_resources):
+    # Split all three skill types
+    tech_in, tech_out = split_skills_by_rag_presence(tech, skill_resources.keys())
+    soft_in, soft_out = split_skills_by_rag_presence(soft, skill_resources.keys())
+    trans_in, trans_out = split_skills_by_rag_presence(trans, skill_resources.keys())
+
+    #  Construct RAG results
+    def extract_rag(skills):
+        result = {}
+        for s in skills:
+            key = s.strip().upper()
+            if key in skill_resources:
+                    result[s] = skill_resources[key]
+        return result
+
+    plan = {
+            "message": "Here's a complete roadmap with relevant resources",
+            "technical_skill_resources": extract_rag(tech_in),
+            "soft_skill_resources": extract_rag(soft_in),
+            "transferable_skill_resources": extract_rag(trans_in)
+    }
+
+    # Prepare GPT prompt only for uncovered skills
+    if tech_out or soft_out or trans_out:
+        prompt = f"""
+        You are a career coach. Only generate resources for the following skills not found in our internal library.
+
+        Provide for each:
+        - One **top-rated course** with real work
+
+[app.py:24-35] def page_1():
+    st.title("Welcome to StepUpYourCareer.AI")
+    st.markdown("##### Let's get started with a few details.")
+
+    name = st.text_input("Your Full Name")
+    email = st.text_input("Your Email Address")
+
+    if name and email:
+        if st.button("➡️ Proceed to Resume Analysis"):
+            st.session_state.name = name
+            st.session_state.email = email
+            st.session_state.page = 2
+
+[Job_Description_JD_Manupulation.ipynb:cell_9] sim_resumes.to_json('sim_resume.json', orient='records', lines=False)
+
+[app.py:60-62] def get_embedding(text, model="text-embedding-ada-002"):
+    response = client.embeddings.create(input=[text], model=model)
+    return response.data[0].embedding
+
+[Job_Description_JD_Manupulation.ipynb:cell_5] from google.colab import sheets
+sheet = sheets.InteractiveSheet(df=req_jobs_desc)
+
+[ClusteringMentorModelTraining.ipynb:cell_21] mentors_final_data[mentors_final_data["cluster"] == prediction[0]][['name', 'bio','linkedin_id', 'technical_skills']]
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_22] from google.colab import files
+
+uploaded = files.upload()
+pdf_path = list(uploaded.keys())[0]
+
+target_role = input("Enter your target role (e.g., 'AI Engineer'): ").strip()
+
+output = analyze_uploaded_resume(pdf_path, target_role)
+
+print(json.dumps(output, indent=2))
+
+[app.py:82-86] def retrieve_examples(query, embeddings, examples, k=3):
+    query_emb = get_embedding(query)
+    sims = sk_cosine([query_emb], embeddings)[0]
+    top_k = sims.argsort()[-k:][::-1]
+    return [examples[i] for i in top_k]
+
+[app.py:65-67] def extract_text_from_pdf(uploaded_file):
+    reader = PdfReader(uploaded_file)
+    return "\n".join([page.extract_text() or "" for page in reader.pages])
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_11] def summarize_resume(resume):
+    tech_skills = ", ".join(resume.get("technical_skills", []))
+    soft_skills = ", ".join(resume.get("soft_skills", []))
+    parts = []
+    if resume.get("education"):
+        parts.append(f"Education: {resume['education']}")
+    if resume.get("work_experience"):
+        roles = [we.get("role") for we in resume["work_experience"] if we.get("role")]
+        if roles:
+            parts.append("Experience roles: " + ", ".join(roles))
+    if tech_skills:
+        parts.append("Technical Skills: " + tech_skills)
+    if soft_skills:
+        parts.append("Soft Skills: " + soft_skills)
+    return " | ".join(parts)
+
+def summarize_job(job):
+    title = job.get("Job Title", "Job")
+    it_skills = job.get("IT Skills", "")
+    soft_skills = job.get("Soft Skills", "")
+    return f"Job Title: {title} | Required Technical Skills: {it_skills} | Required Soft Skills: {soft_skills}"
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_5] roles = [
+    "Artificial Intelligence",
+    "Business Analyst",
+    "Business Intelligence Analyst",
+    "Data Analyst",
+    "Machine Learning"
+]
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_15] jobs_df = pd.read_csv("req_job_desc.csv")
+
+# Group by target role
+grouped_roles = jobs_df.groupby("Query")
+
+def extract_skills_from_descriptions(role, descriptions):
+    combined_text = "\n\n---\n\n".join(descriptions)
+
+    prompt = f"""
+      You are a highly skilled AI career advisor. You are given a set of job descriptions for the role of "{role}".
+
+      Your task is to extract the **common transferable skills** required across these jobs — categorize them as:
+      1. Technical Skills
+      2. Soft Skills
+
+      Avoid any industry-specific or domain-specific skills (e.g., "healthcare compliance", "lab equipment use", "insurance claim processing"). Focus only on **transferable, job-agnostic skills**.
+
+      Output must be in strict JSON format like this:
+      {{
+        "role": "{role}",
+        "technical_skills": ["skill1", "skill2", ...],
+        "soft_skills": ["skillA", "skillB", ...]
+      }}
+
+      Here are the job descriptions:
+      {combined_text}
+      """
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant for extracting transf
+
+[ClusteringMentorModelTraining.ipynb:cell_3] client = OpenAI(api_key=userdata.get("Open_AI_API_KEY"))
+
+[ClusteringMentorModelTraining.ipynb:cell_10] k_val = np.arange(10, 30)
+best_k = None
+best_score = -1
+shilloutte_scores = []
+inertias = []
+ch_indexs = []
+
+for k in k_val:
+    temp_sil_scores = []
+    temp_ch_scores = []
+    temp_inertias = []
+
+    for run in range(100):  # 100 is heavy; reduce to 5 or 10 for dev
+        kmeans = KMeans(n_clusters=k, random_state=run, n_init='auto')
+        labels = kmeans.fit_predict(skills_df)
+
+        sil_score = silhouette_score(skills_df, labels)
+        ch_index = calinski_harabasz_score(skills_df, labels)
+
+        temp_sil_scores.append(sil_score)
+        temp_ch_scores.append(ch_index)
+        temp_inertias.append(kmeans.inertia_)
+
+    # Average over all runs
+    avg_sil = np.mean(temp_sil_scores)
+    avg_ch = np.mean(temp_ch_scores)
+    avg_inertia = np.mean(temp_inertias)
+
+    shilloutte_scores.append(avg_sil)
+    ch_indexs.append(avg_ch)
+    inertias.append(avg_inertia)
+
+    if avg_sil > best_score:
+        best_score = avg_sil
+        best_k = k
+
+print(f"✅ Best K = {best_k} with silhouette score = {best_score:.4f}")
+
+# 📈 Plot all 3 metrics
+plt.figure(figsize=(15, 4))
+
+plt.subplot(1, 3, 1)
+plt.plot(k_val, inertias, marker='o')
+plt.title("Elbow Plot (Inertia)")
+plt.xlabel("Number of C
+
+[app.py:70-79] def anonymize(text):
+    response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant that removes personal identifiers from resumes."},
+        {"role": "user", "content": f"Anonymize this resume:\n\n{text}"}
+        ],
+        temperature=0
+        )
+    return response.choices[0].message.content.strip()
+
+[app.py:173-175] def load_skill_resources():
+    with open("/mount/src/stepupyourcareer.ai/StepUpAI/skill_resource_mapping.json", "r") as f:
+        return json.load(f)
+
+[Job_Description_JD_Manupulation.ipynb:cell_8] sim_resumes.loc[sim_resumes['target_role'] == 'Artificial Intelligence', 'target_role'] = 'AI Engineer'
+
+[ClusteringMentorModelTraining.ipynb:cell_8] mlb = MultiLabelBinarizer()
+skills_matrix = mlb.fit_transform(mentors_final_data['technical_skills'])
+joblib.dump(mlb, "mlb.joblib")
+skills_df = pd.DataFrame(skills_matrix, columns=mlb.classes_, index=mentors_final_data.index)
+skills_df.head(5)
+
+[app.py:178-186] def split_skills_by_rag_presence(skills, rag_skill_keys):
+    present = []
+    missing = []
+    for skill in skills:
+        if skill.strip().upper() in rag_skill_keys:
+            present.append(skill)
+        else:
+            missing.append(skill)
+    return present, missing
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_9] with open("all_roles_student_resumes.json", "r") as f:
+    resumes = json.load(f)
+
+jobs_df = pd.read_csv("req_job_desc.csv")
+
+[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_7] def generate_student_resume(role: str):
+    prompt = f"""
+You are generating a **realistic and anonymized resume** for a computer science student or recent graduate (0–2 years of experience) applying for a role as a {role}.
+
+Return strictly valid JSON in the following format:
+{{
+  "name": "Candidate_<ID>",
+  "education": "<Degree, Masked University (e.g., 'Top Engineering Institute'), Graduation Years>",
+  "work_experience": [
+    {{
+      "role": "<Internship or research title>",
+      "company": "<Realistic but anonymized organization (e.g., 'NeuroTech AI', 'InsightSoft Labs')>",
+      "duration": "<Month Year – Month Year>",
+      "description": "Describe the responsibilities in a detailed, narrative style. Mention the purpose of the project, specific tasks completed, tools/technologies used, and measurable impact. Be authentic — include dataset sizes, model names, APIs, or product features if relevant."
+    }},
+    {{
+      "role": "<Optional second experience (lab assistant, part-time dev, open-source contributor)>",
+      "company": "<Another anonymized organization (e.g., 'Top Tech University - DataLab')>",
+      "duration": "<Month Year – Month Year>",
+      "description": 
