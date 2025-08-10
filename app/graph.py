@@ -320,7 +320,7 @@ def n_revise(state: State) -> State:
         issues = "\n".join((data.get("unsupported_claims") or []))
         notes = (data.get("notes", "") + ("\n" + issues if issues else "")).strip()
 
-    llm = ChatOpenAI(model="gpt-5.1-mini", temperature=0)
+    llm = ChatOpenAI(model="gpt-4.1-mini", temperature=0)
     sys = "Revise DRAFT to align strictly with CONTEXT. Remove/qualify unsupported claims. Add/adjust citations. Keep it concise."
     usr = (
         f"SECTION: {spec.name}\n\nNOTES:\n{notes}\n\n"
