@@ -1,6 +1,74 @@
-[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_14] ### Extracting common required technical and soft skills required for each role.
+[the app.py:188-268] def generate_hybrid_action_plan(tech, soft, trans, skill_resources):
+    # Split all three skill types
+    tech_in, tech_out = split_skills_by_rag_presence(tech, skill_resources.keys())
+    soft_in, soft_out = split_skills_by_rag_presence(soft, skill_resources.keys())
+    trans_in, trans_out = split_skills_by_rag_presence(trans, skill_resources.keys())
 
-[requirements.txt:1-9] streamlit
+    #  Construct RAG results
+    def extract_rag(skills):
+        result = {}
+        for s in skills:
+            key = s.strip().upper()
+            if key in skill_resources:
+                    result[s] = skill_resources[key]
+        return result
+
+    plan = {
+            "message": "Here's a complete roadmap with relevant resources",
+            "technical_skill_resources": extract_rag(tech_in),
+            "soft_skill_resources": extract_rag(soft_in),
+            "transferable_skill_resources": extract_rag(trans_in)
+    }
+
+    # P
+
+[the app.py:60-62] def get_embedding(text, model="text-embedding-ada-002"):
+    response = client.embeddings.create(input=[text], model=model)
+    return response.data[0].embedding
+
+[the app.py:164-171] def extract_json_from_response(raw):
+    match = re.search(r"\{[\s\S]*\}", raw)
+    if match:
+        try:
+            return json.loads(match.group())
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+[the Job_Description_JD_Manupulation.ipynb:cell_6] uploaded = files.upload()
+
+for fn in uploaded.keys():
+  print('User uploaded file "{name}" with length {length} bytes'.format(
+      name=fn, length=len(uploaded[fn])))
+
+[the Job_Description_JD_Manupulation.ipynb:cell_3] jobs_desc = pd.read_csv("JobsDatasetProcessed.csv")
+req_jobs_desc = jobs_desc.query("Query in ['Artificial Intelligence', 'Business Analyst', 'Business Intelligence Analyst', 'Data Analyst', 'Machine Learning']")
+req_jobs_desc = req_jobs_desc[['Query', 'Description']]
+
+[the ClusteringMentorModelTraining.ipynb:cell_3] client = OpenAI(api_key=userdata.get("Open_AI_API_KEY"))
+
+[the ClusteringMentorModelTraining.ipynb:cell_21] mentors_final_data[mentors_final_data["cluster"] == prediction[0]][['name', 'bio','linkedin_id', 'technical_skills']]
+
+[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_5] roles = [
+    "Artificial Intelligence",
+    "Business Analyst",
+    "Business Intelligence Analyst",
+    "Data Analyst",
+    "Machine Learning"
+]
+
+[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_22] from google.colab import files
+
+uploaded = files.upload()
+pdf_path = list(uploaded.keys())[0]
+
+target_role = input("Enter your target role (e.g., 'AI Engineer'): ").strip()
+
+output = analyze_uploaded_resume(pdf_path, target_role)
+
+print(json.dumps(output, indent=2))
+
+[the requirements.txt:1-10] streamlit
 openai>=1.0.0
 PyPDF2
 pandas
@@ -10,87 +78,25 @@ numpy
 pandas
 joblib
 
-[ClusteringMentorModelTraining.ipynb:cell_9] ### Fitting a KMean model with range of cluster k and ran for 100 times to be certain.
 
-[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_23] ### Action Plan Generation (Testing for 3 Candidates)
+[the README.md:1-29] # StepUpYourCareer.ai: Elevate Your Future
 
-[ClusteringMentorModelTraining.ipynb:cell_4] ## Prompt to generate Mentors with skills of experties
+An AI-powered career assistant that helps students and job seekers identify **skill gaps**, receive **personalized learning roadmaps**, and connect with **industry mentors**—all from a single resume upload.
 
-[Job_Description_JD_Manupulation.ipynb:cell_4] req_jobs_desc.loc[req_jobs_desc['Query'] == 'Artificial Intelligence', 'Query'] = 'AI Engineer'
-req_jobs_desc
+### Link to the website: https://stepupyourcareer.streamlit.app/
 
-[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_2] # !pip install PyPDF2 openai
-import openai
-import json
-import time
-import re
-from openai import OpenAI
-from google.colab import userdata
-import pandas as pd
-pd.set_option('display.max_colwidth', None)
-from PyPDF2 import PdfReader
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
+---
 
-[ClusteringMentorModelTraining.ipynb:cell_5] def generate_mentor_prompt(role, tech_skills, n=10):
-    prompt = f"""
-You are an assistant helping to create a database of expert mentors.
+## Problem
 
-Generate {n} mentor profiles for the role: "{role}".
+Graduates often leave university with degrees but **lack clarity on what employers actually expect**. They spend months applying for jobs, facing rejections without knowing **what skills they’re missing** or **how to upskill efficiently**.
 
-Each mentor should have:
-- A realistic name
-- A short professional bio (1–2 sentences)
-- A list of 5–7 technical skills (from this list but make sure it the wording are same or atleast close to it, because we will be doing predictions on it later):
-  {', '.join(tech_skills)}
+---
 
-Return the output in this JSON format:
-[
-  {{
-    "name": "Mentor Name",
-    "bio": "Short mentor bio.",
-    "linkedin_id": "Mentor LinkedIn ID",
-    "technical_skills": ["skill1", "skill2", ...]
-  }},
-  ...
-]
-"""
-    return prompt
+## Solution
 
-# Load role + skill data
-with open("/content/sample_data/role_skills.json") as f:
-    roles_data = json.load(f)
+**StepUpYourCareer.ai** transforms your resume into a personalized upskilling journey.
 
-# Collection
-all_mentors = []
-mentor_counter = 1
-
-# Generate mentors for each role
-for role_info in roles_data:
-    role = role_info["role"]
-    tech_skills = role_info["technical_skills"]
-
-    prompt = generate_mentor_prompt(role, tech_skills, n=25)
-
-    try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "use
-
-[app.py:24-35] def page_1():
-    st.title("Welcome to StepUpYourCareer.AI")
-    st.markdown("##### Let's get started with a few details.")
-
-    name = st.text_input("Your Full Name")
-    email = st.text_input("Your Email Address")
-
-    if name and email:
-        if st.button("➡️ Proceed to Resume Analysis"):
-            st.session_state.name = name
-            st.session_state.email = email
-            st.session_state.page = 2
-
-[Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_9] with open("all_roles_student_resumes.json", "r") as f:
-    resumes = json.load(f)
-
-jobs_df = pd.read_csv("req_job_desc.csv")
+- **Skill Gap Analyzer**: Extracts skills from your resume and compares them to your target role
+- **Action Plan Generator**: Recommends curated online courses and resources for each missing skill
+- **Mentor Matching**
