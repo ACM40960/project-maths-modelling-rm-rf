@@ -213,7 +213,7 @@ def n_write(state: State) -> State:
           should verify citation conformity if needed.
     """
     spec = state["spec"]
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm = ChatOpenAI(model="gpt-4.1-mini", temperature=0)
 
     sys = (
         "You are a senior engineer who has wrote this code."
@@ -283,7 +283,7 @@ def n_judge(state: State) -> State:
                '"missing_but_expected":[], "score": 0.0, "notes":"Judge did not return JSON"}')
 
     Path("debug").mkdir(exist_ok=True)
-    Path("debug/judge.json").write_text(out, encoding="utf-8")
+    Path(f"debug/{state['spec'].name}_judge.json").write_text(out, encoding="utf-8")
     return {"_judge": out}
 
 def n_human_review(state: State) -> State:
@@ -320,7 +320,7 @@ def n_revise(state: State) -> State:
         issues = "\n".join((data.get("unsupported_claims") or []))
         notes = (data.get("notes", "") + ("\n" + issues if issues else "")).strip()
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm = ChatOpenAI(model="gpt-5.1-mini", temperature=0)
     sys = "Revise DRAFT to align strictly with CONTEXT. Remove/qualify unsupported claims. Add/adjust citations. Keep it concise."
     usr = (
         f"SECTION: {spec.name}\n\nNOTES:\n{notes}\n\n"
