@@ -1,74 +1,51 @@
-[the app.py:188-268] def generate_hybrid_action_plan(tech, soft, trans, skill_resources):
-    # Split all three skill types
-    tech_in, tech_out = split_skills_by_rag_presence(tech, skill_resources.keys())
-    soft_in, soft_out = split_skills_by_rag_presence(soft, skill_resources.keys())
-    trans_in, trans_out = split_skills_by_rag_presence(trans, skill_resources.keys())
+[the app.py:24-35] def page_1():
+    st.title("Welcome to StepUpYourCareer.AI")
+    st.markdown("##### Let's get started with a few details.")
 
-    #  Construct RAG results
-    def extract_rag(skills):
-        result = {}
-        for s in skills:
-            key = s.strip().upper()
-            if key in skill_resources:
-                    result[s] = skill_resources[key]
-        return result
+    name = st.text_input("Your Full Name")
+    email = st.text_input("Your Email Address")
 
-    plan = {
-            "message": "Here's a complete roadmap with relevant resources",
-            "technical_skill_resources": extract_rag(tech_in),
-            "soft_skill_resources": extract_rag(soft_in),
-            "transferable_skill_resources": extract_rag(trans_in)
-    }
+    if name and email:
+        if st.button("➡️ Proceed to Resume Analysis"):
+            st.session_state.name = name
+            st.session_state.email = email
+            st.session_state.page = 2
 
-    # P
+[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_3] client = OpenAI(api_key=userdata.get("openai_key"))
 
-[the app.py:60-62] def get_embedding(text, model="text-embedding-ada-002"):
+[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_21] with open("skill_gap_analysis.json", "r") as f:
+    examples = json.load(f)
+
+def get_embedding(text, model="text-embedding-ada-002"):
     response = client.embeddings.create(input=[text], model=model)
     return response.data[0].embedding
 
-[the app.py:164-171] def extract_json_from_response(raw):
-    match = re.search(r"\{[\s\S]*\}", raw)
-    if match:
-        try:
-            return json.loads(match.group())
-        except json.JSONDecodeError:
-            return {}
-    return {}
-
-[the Job_Description_JD_Manupulation.ipynb:cell_6] uploaded = files.upload()
-
-for fn in uploaded.keys():
-  print('User uploaded file "{name}" with length {length} bytes'.format(
-      name=fn, length=len(uploaded[fn])))
-
-[the Job_Description_JD_Manupulation.ipynb:cell_3] jobs_desc = pd.read_csv("JobsDatasetProcessed.csv")
-req_jobs_desc = jobs_desc.query("Query in ['Artificial Intelligence', 'Business Analyst', 'Business Intelligence Analyst', 'Data Analyst', 'Machine Learning']")
-req_jobs_desc = req_jobs_desc[['Query', 'Description']]
-
-[the ClusteringMentorModelTraining.ipynb:cell_3] client = OpenAI(api_key=userdata.get("Open_AI_API_KEY"))
-
-[the ClusteringMentorModelTraining.ipynb:cell_21] mentors_final_data[mentors_final_data["cluster"] == prediction[0]][['name', 'bio','linkedin_id', 'technical_skills']]
-
-[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_5] roles = [
-    "Artificial Intelligence",
-    "Business Analyst",
-    "Business Intelligence Analyst",
-    "Data Analyst",
-    "Machine Learning"
+example_texts = [
+    f"Resume: {ex['resume_summary']} | Role: {ex['target_role']}" for ex in examples
 ]
+example_embeddings = [get_embedding(text) for text in example_texts]
 
-[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_22] from google.colab import files
+with open("role_skills.json", "r") as f:
+    role_skills_list = json.load(f)
 
-uploaded = files.upload()
-pdf_path = list(uploaded.keys())[0]
+# Convert list → dict: { role_name: {technical_skills: [...], soft_skills: [...]} }
+role_skills = {
+    entry["role"]: {
+        "technical_skills": entry.get("technical_skills", []),
+        "soft_skills": entry.get("soft_skills", [])
+    }
+    for entry in role_skills_list if "role" in entry
+}
 
-target_role = input("Enter your target role (e.g., 'AI Engineer'): ").strip()
+# Anonymize resume text
+def anonymize(text):
+    return client.chat.completions.create(
+        model="gpt-4o
 
-output = analyze_uploaded_resume(pdf_path, target_role)
+[the Job_Description_JD_Manupulation.ipynb:cell_4] req_jobs_desc.loc[req_jobs_desc['Query'] == 'Artificial Intelligence', 'Query'] = 'AI Engineer'
+req_jobs_desc
 
-print(json.dumps(output, indent=2))
-
-[the requirements.txt:1-10] streamlit
+[the requirements.txt:1-9] streamlit
 openai>=1.0.0
 PyPDF2
 pandas
@@ -78,6 +55,7 @@ numpy
 pandas
 joblib
 
+[the ClusteringMentorModelTraining.ipynb:cell_9] ### Fitting a KMean model with range of cluster k and ran for 100 times to be certain.
 
 [the README.md:1-29] # StepUpYourCareer.ai: Elevate Your Future
 
