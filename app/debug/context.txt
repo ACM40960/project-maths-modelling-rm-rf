@@ -1,0 +1,70 @@
+[the app.py:24-35] def page_1():
+    st.title("Welcome to StepUpYourCareer.AI")
+    st.markdown("##### Let's get started with a few details.")
+
+    name = st.text_input("Your Full Name")
+    email = st.text_input("Your Email Address")
+
+    if name and email:
+        if st.button("➡️ Proceed to Resume Analysis"):
+            st.session_state.name = name
+            st.session_state.email = email
+            st.session_state.page = 2
+
+[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_3] client = OpenAI(api_key=userdata.get("openai_key"))
+
+[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_21] with open("skill_gap_analysis.json", "r") as f:
+    examples = json.load(f)
+
+def get_embedding(text, model="text-embedding-ada-002"):
+    response = client.embeddings.create(input=[text], model=model)
+    return response.data[0].embedding
+
+example_texts = [
+    f"Resume: {ex['resume_summary']} | Role: {ex['target_role']}" for ex in examples
+]
+example_embeddings = [get_embedding(text) for text in example_texts]
+
+with open("role_skills.json", "r") as f:
+    role_skills_list = json.load(f)
+
+# Convert list → dict: { role_name: {technical_skills: [...], soft_skills: [...]} }
+role_skills = {
+    entry["role"]: {
+        "technical_skills": entry.get("technical_skills", []),
+        "soft_skills": 
+
+[the Job_Description_JD_Manupulation.ipynb:cell_4] req_jobs_desc.loc[req_jobs_desc['Query'] == 'Artificial Intelligence', 'Query'] = 'AI Engineer'
+req_jobs_desc
+
+[the requirements.txt:1-9] streamlit
+openai>=1.0.0
+PyPDF2
+pandas
+scikit-learn
+tqdm
+numpy
+pandas
+joblib
+
+[the ClusteringMentorModelTraining.ipynb:cell_9] ### Fitting a KMean model with range of cluster k and ran for 100 times to be certain.
+
+[the README.md:1-29] # StepUpYourCareer.ai: Elevate Your Future
+
+An AI-powered career assistant that helps students and job seekers identify **skill gaps**, receive **personalized learning roadmaps**, and connect with **industry mentors**—all from a single resume upload.
+
+### Link to the website: https://stepupyourcareer.streamlit.app/
+
+---
+
+## Problem
+
+Graduates often leave university with degrees but **lack clarity on what employers actually expect**. They spend months applying for jobs, facing rejections without knowing **what skills they’re missing** or **how to upskill efficiently**.
+
+---
+
+## Solution
+
+**StepUpYourCareer.ai** transforms your resume into a personalized upskilling journey.
+
+- **Skill Gap Anal
