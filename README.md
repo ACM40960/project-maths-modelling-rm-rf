@@ -44,7 +44,7 @@
 
 ## 🖼️ UI Preview
 
-![App UI – Auto Doc Gen](./assets/ui%20screenshot.png)
+![App UI – Auto Doc Gen](./assets/ui-screenshot.png)
 
 ---
 
