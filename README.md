@@ -25,20 +25,35 @@
   A second model verifies **factuality**, **citations**, and **missing-but-expected** items; verdicts saved as JSON for audit.
 
 - **Word-friendly diagrams**
-
-  ```mermaid
-  %% example
-  graph TD
-    A[Start] --> B[Retrieve]
-    B --> C[Write]
-    C --> D[Judge]
-    D --> E[DOCX]
-  ```
-
-  Mermaid blocks are rendered to **PNG** so diagrams show up correctly in DOCX.
+  The app **automatically creates a Mermaid system architecture diagram**, and all Mermaid blocks are rendered to **PNG** so diagrams show up correctly in DOCX.
 
 - **Local-first**  
   Everything runs on your machine; only embeddings/LLM calls use your configured provider key.
+
+---
+
+## 🏗️ System Architecture
+
+````mermaid
+%%{init: { "theme": "default" }}%%
+flowchart LR
+  subgraph Ingestion & Indexing
+    GH[GitHub Repo] --> CL[Cloner (GitPython)]
+    CL --> PC[Parser & Chunker]
+    PC --> EMB[Embedding]
+  end
+  EMB --> R[Retrieve]
+
+  subgraph Agent
+    R --> W[Write]
+    W --> J[Judge]
+    J -- pass --> S[Save]
+    S --> E[End]
+    J -- fail --> V[Revise]
+    V --> W
+  end
+
+  W --> D[[Generate the doc file]]
 
 ---
 
@@ -62,7 +77,7 @@
 ```bash
 git clone https://github.com/<your-org-or-user>/<your-repo>.git
 cd <your-repo>
-```
+````
 
 ### 2) Python env + deps
 
