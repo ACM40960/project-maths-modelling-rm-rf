@@ -44,7 +44,7 @@
 
 ## 🖼️ UI Preview
 
-![App UI – Generate Technical Documentation](https://github.com/ACM40960/project-maths-modelling-rm-rf/issues/7#issue-3346199547)
+![App UI – Auto Doc Gen](./assets/ui%20screenshot.png)
 
 ---
 
