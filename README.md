@@ -34,26 +34,26 @@
 
 ## 🏗️ System Architecture
 
-````mermaid
-%%{init: { "theme": "default" }}%%
+```mermaid
 flowchart LR
-  subgraph Ingestion & Indexing
-    GH[GitHub Repo] --> CL[Cloner (GitPython)]
-    CL --> PC[Parser & Chunker]
-    PC --> EMB[Embedding]
+  subgraph Ingestion_And_Indexing
+    GH[GitHub Repo] --> CL[Clone Repo]
+    CL --> PC[Parse and Chunk]
+    PC --> EMB[Create Embeddings]
   end
-  EMB --> R[Retrieve]
+
+  EMB --> R[Retrieve Context]
 
   subgraph Agent
     R --> W[Write]
     W --> J[Judge]
     J -- pass --> S[Save]
-    S --> E[End]
     J -- fail --> V[Revise]
     V --> W
   end
 
-  W --> D[[Generate the doc file]]
+  S --> E[End]
+  W --> D[Generate DOCX]
 ```
 
 ---
