@@ -54,6 +54,7 @@ flowchart LR
   end
 
   W --> D[[Generate the doc file]]
+```
 
 ---
 
