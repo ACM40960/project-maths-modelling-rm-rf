@@ -70,7 +70,7 @@ cd <your-repo>
 # Windows
 python -m venv project_view
 project_view\Scripts\activate
-pip install -r requirements-windows.txt
+pip install -r requirements.txt
 
 # macOS/Linux
 python3 -m venv project_view
@@ -156,7 +156,7 @@ Paste a GitHub URL, click **Generate**, watch logs, then **Save** the DOCX.
 │  ├─ index.html
 │  ├─ preload.js
 │  └─ main.js               # spawns Python, Mermaid→PNG, DOCX export
-├─ requirements.txt / requirements-windows.txt
+├─ requirements.txt
 ├─ package.json (in /ui)
 └─ LICENSE
 ```
