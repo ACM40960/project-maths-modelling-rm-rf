@@ -1,0 +1,12 @@
+openai
+langchain
+langgraph
+langchain-openai
+langchain-community
+python-dotenv
+faiss-cpu
+gitpython
+nbformat
+pandas
+python-docx
+tiktoken
