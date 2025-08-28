@@ -4,7 +4,25 @@ from save_to_vector_db import save_to_faiss_split_by_ext
 from graph import build_graph, SectionSpec
 
 # change to input
-repo_url = "https://github.com/adarshlearnngrow/StepUpYourCareer.AI"
+#repo_url = "https://github.com/adarshlearnngrow/StepUpYourCareer.AI"
+
+# --- minimal override so UI can pass the URL ---
+import os, sys, argparse
+
+# default (your current hard-coded URL)
+#_default_repo_url = "https://github.com/adarshlearnngrow/StepUpYourCareer.AI"
+
+# allow CLI override: python main.py --repo <url>
+_parser = argparse.ArgumentParser(add_help=False)
+_parser.add_argument("--repo", dest="repo", default=None)
+_args, _unknown = _parser.parse_known_args()
+
+repo_url = _args.repo or os.environ.get("REPO_URL")
+if not repo_url:
+    print("ERROR: Provide a repo via --repo <url> (or set REPO_URL).", file=sys.stderr)
+    sys.exit(2)
+# -----------------------------------------------
+
 repo_path = clone_repo(repo_url)
 
 
@@ -97,6 +115,7 @@ Output format (only include what is available or inferred):
 11. **Future Extensions**
     - Possible evolutions, integrations, optimizations.
     - Mark inferred items clearly per rules.
+If you thing there are additional section that can be added, you can but make sure to follow the rules and limit to only 2 additional section, you can change the order if you want.
 '''
 )
 
