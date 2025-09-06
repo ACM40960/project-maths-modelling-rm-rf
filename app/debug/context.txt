@@ -1,70 +1,75 @@
-[the app.py:24-35] def page_1():
-    st.title("Welcome to StepUpYourCareer.AI")
-    st.markdown("##### Let's get started with a few details.")
+[the LLM report generation.ipynb:cell_0] from dotenv import load_dotenv
+import os
+from openai import OpenAI
 
-    name = st.text_input("Your Full Name")
-    email = st.text_input("Your Email Address")
+# Load environment variables from .env file
+load_dotenv()
 
-    if name and email:
-        if st.button("➡️ Proceed to Resume Analysis"):
-            st.session_state.name = name
-            st.session_state.email = email
-            st.session_state.page = 2
+# Now read the key from environment
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_3] client = OpenAI(api_key=userdata.get("openai_key"))
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": "You are a very experienced financial analyst."},
+        {"role": "user", "content":
+            (
+                "We have a customer credit risk model that predicts the probability of default (PD), "
+                "and we also have SHAP explainability values showing the feature contributions. "
+                "You will be given the model's PD predictio
 
-[the Skill_Gap_Analysis_and_Action_Plan_Generation.ipynb:cell_21] with open("skill_gap_analysis.json", "r") as f:
-    examples = json.load(f)
+[the meta.yaml:1-7] destination_id: m-301fab49a5524903b76d55b6597c2de7
+destination_type: MODEL_OUTPUT
+source_id: m-301fab49a5524903b76d55b6597c2de7
+source_type: RUN_OUTPUT
+step: 0
+tags: {}
 
-def get_embedding(text, model="text-embedding-ada-002"):
-    response = client.embeddings.create(input=[text], model=model)
-    return response.data[0].embedding
 
-example_texts = [
-    f"Resume: {ex['resume_summary']} | Role: {ex['target_role']}" for ex in examples
-]
-example_embeddings = [get_embedding(text) for text in example_texts]
+[the python_env.yaml:1-8] python: 3.13.5
+build_dependencies:
+- pip==25.0.1
+- setuptools==80.8.0
+- wheel
+dependencies:
+- -r requirements.txt
 
-with open("role_skills.json", "r") as f:
-    role_skills_list = json.load(f)
 
-# Convert list → dict: { role_name: {technical_skills: [...], soft_skills: [...]} }
-role_skills = {
-    entry["role"]: {
-        "technical_skills": entry.get("technical_skills", []),
-        "soft_skills": 
+[the meta.yaml:1-10] aliases:
+  production: '2'
+  withupdatedpipeling: '2'
+creation_timestamp: 1751497581443
+deployment_job_id: null
+deployment_job_state: null
+description: ''
+last_updated_timestamp: 1751501077088
+name: Credit Risk Model
 
-[the Job_Description_JD_Manupulation.ipynb:cell_4] req_jobs_desc.loc[req_jobs_desc['Query'] == 'Artificial Intelligence', 'Query'] = 'AI Engineer'
-req_jobs_desc
 
-[the requirements.txt:1-9] streamlit
-openai>=1.0.0
-PyPDF2
-pandas
-scikit-learn
-tqdm
+[the eda.ipynb:cell_31] All class overlap, let try getting some feature from this variables
+
+[the requirements.txt:1-10] pyodbc
 numpy
 pandas
-joblib
+matplotlib
+seaborn
+scipy
+scikit-learn
+openpyxl
+sqlalchemy
 
-[the ClusteringMentorModelTraining.ipynb:cell_9] ### Fitting a KMean model with range of cluster k and ran for 100 times to be certain.
 
-[the README.md:1-29] # StepUpYourCareer.ai: Elevate Your Future
+[the Data_Cleaning -checkpoint.ipynb:cell_12] ### Missing NAME_TYPE_SUITE is filled with Unspecified
 
-An AI-powered career assistant that helps students and job seekers identify **skill gaps**, receive **personalized learning roadmaps**, and connect with **industry mentors**—all from a single resume upload.
+[the eda.ipynb:cell_47] Here I am assuming, the user will be porviding flag doc 1 whoch mandatory but aprat from that how many docs porvided but the field looks very very low variance
 
-### Link to the website: https://stepupyourcareer.streamlit.app/
+However, creating a new field bianry which says if additional_doc_provided, and delete all other values to decreas esaprsity
 
----
+[the Data Cleaning.ipynb:cell_16] The dataset originally includes three external rating features:
 
-## Problem
+- `EXT_SOURCE_1`
+- `EXT_SOURCE_2`
+- `EXT_SOURCE_3`
 
-Graduates often leave university with degrees but **lack clarity on what employers actually expect**. They spend months applying for jobs, facing rejections without knowing **what skills they’re missing** or **how to upskill efficiently**.
-
----
-
-## Solution
-
-**StepUpYourCareer.ai** transforms your resume into a personalized upskilling journey.
-
-- **Skill Gap Anal
+However, during the **SQL preprocessing stage**, we created a new feature:  
+**`AVERAGE_EXTERNAL_RATING`** — the average of all available EXT_SOURCE values.

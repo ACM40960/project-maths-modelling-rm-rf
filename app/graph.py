@@ -363,7 +363,8 @@ def decide_pass_or_revise(state: State):
 
 def n_save(state: State) -> State:
     spec = state["spec"]
-    out = f"# {spec.name}\n\n{state['draft']}\n"
+    # FIX: Let the draft from the AI be the complete content for the file.
+    out = state['draft']
     Path("docs").mkdir(exist_ok=True)
     fname = spec.name.lower().replace("&","and").replace(" ", "_") + ".md"
     path = f"docs/{fname}"

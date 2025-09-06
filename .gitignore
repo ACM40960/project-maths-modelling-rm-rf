@@ -21,3 +21,17 @@ src/
 
 node_modules/
 project_view/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Project Specific
+cloned_repos/
+docs_index/
+docs/
+*.md
+*.docx
+*.flag
+debug/
